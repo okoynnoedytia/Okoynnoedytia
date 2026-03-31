@@ -344,7 +344,7 @@
             box-shadow: 0 0 40px rgba(170, 90, 58, 0.4);
         }
 
-        /* ========== ДЕМОНИЧЕСКИЙ ГЛАЗ SVG ========== */
+        /* Демонический глаз SVG */
         .demonic-eye-container {
             display: flex;
             justify-content: center;
@@ -366,7 +366,6 @@
             transform: scale(1.02);
         }
 
-        /* Анимация пульсации внешнего свечения */
         @keyframes eyePulse {
             0%, 100% { filter: drop-shadow(0 0 8px rgba(170, 90, 58, 0.6)); }
             50% { filter: drop-shadow(0 0 20px rgba(255, 80, 40, 0.9)); }
@@ -375,9 +374,6 @@
         .demonic-eye-svg {
             animation: eyePulse 2s ease-in-out infinite;
         }
-
-        /* Анимация движения зрачка будет через JS */
-        /* ======================================== */
 
         .about {
             padding: 90px 0;
@@ -1066,24 +1062,19 @@
                                     <stop offset="0%" stop-color="#ff5500"/>
                                     <stop offset="100%" stop-color="#aa3300"/>
                                 </radialGradient>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
                             </defs>
-                            <!-- Склера (внешняя оболочка) -->
+                            <!-- Склера -->
                             <ellipse cx="50" cy="50" rx="45" ry="48" fill="url(#eyeGradient)" stroke="#aa5a3a" stroke-width="2"/>
-                            <!-- Белок с кровянистым оттенком -->
+                            <!-- Белок -->
                             <ellipse cx="50" cy="50" rx="35" ry="38" fill="#3a0f0f" stroke="#aa5a3a" stroke-width="1"/>
-                            <!-- Радужка (будет двигаться) -->
-                            <g id="irisGroup">
-                                <circle id="iris" cx="48" cy="52" r="22" fill="url(#irisGradient)" filter="url(#glow)"/>
-                                <!-- Зрачок -->
-                                <circle id="pupil" cx="45" cy="50" r="12" fill="#000000"/>
-                            </g>
+                            <!-- Радужка (статичная, но с градиентом) -->
+                            <circle cx="50" cy="52" r="22" fill="url(#irisGradient)"/>
+                            <!-- Зрачок (с анимацией размера) -->
+                            <circle id="pupilAnim" cx="47" cy="50" r="12" fill="#000000">
+                                <animate attributeName="r" values="12;13;11;12" dur="3s" repeatCount="indefinite" />
+                                <animate attributeName="cx" values="47;48;46;47" dur="4s" repeatCount="indefinite" />
+                                <animate attributeName="cy" values="50;51;49;50" dur="3.5s" repeatCount="indefinite" />
+                            </circle>
                             <!-- Блик -->
                             <circle cx="38" cy="42" r="4" fill="white" opacity="0.9"/>
                             <circle cx="42" cy="44" r="1.5" fill="white" opacity="0.7"/>
@@ -1387,30 +1378,6 @@
                 heroImage.style.transform = `translateY(${scrolled * 0.1}px)`;
             }
         });
-
-        // Анимация движения зрачка (демонический эффект)
-        function animatePupil() {
-            const iris = document.getElementById('iris');
-            const pupil = document.getElementById('pupil');
-            if (!iris || !pupil) return;
-            
-            let step = 0;
-            setInterval(() => {
-                // Плавное движение зрачка по кругу и смена направления
-                const angle = Date.now() / 2000;
-                const radius = 6;
-                const xOffset = Math.sin(angle) * radius;
-                const yOffset = Math.cos(angle * 0.7) * radius;
-                
-                iris.setAttribute('cx', 48 + xOffset);
-                iris.setAttribute('cy', 52 + yOffset * 0.6);
-                pupil.setAttribute('cx', 45 + xOffset * 1.2);
-                pupil.setAttribute('cy', 50 + yOffset * 0.7);
-            }, 100);
-        }
-        
-        // Запускаем анимацию после загрузки страницы
-        window.addEventListener('load', animatePupil);
     </script>
 </body>
 </html>
