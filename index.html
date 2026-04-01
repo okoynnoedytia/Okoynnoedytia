@@ -20,6 +20,7 @@
             line-height: 1.5;
             scroll-behavior: smooth;
             overflow-x: hidden;
+            cursor: default;
         }
 
         @keyframes gradientShift {
@@ -41,6 +42,47 @@
             animation: gradientShift 15s ease infinite;
             pointer-events: none;
             z-index: 0;
+        }
+
+        .smoke-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .smoke {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(80, 40, 30, 0.4) 0%, rgba(30, 20, 15, 0.2) 50%, transparent 80%);
+            border-radius: 50%;
+            filter: blur(30px);
+            animation: smokeDrift 12s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes smokeDrift {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-300px) scale(2);
+                opacity: 0;
+            }
         }
 
         .particles {
@@ -328,51 +370,54 @@
             text-align: center;
             border: 1px solid rgba(170, 90, 58, 0.4);
             width: 100%;
-            max-width: 320px;
+            max-width: 450px;
             margin: 0 auto;
             transition: all 0.4s;
-            animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .hero-image:hover {
-            border-color: #aa5a3a;
-            box-shadow: 0 0 40px rgba(170, 90, 58, 0.4);
-        }
-
-        /* Демонический глаз SVG */
-        .demonic-eye-container {
+        .svg-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
-        .demonic-eye-svg {
-            width: 140px;
-            height: 140px;
+        .effect-svg {
             filter: drop-shadow(0 0 8px rgba(170, 90, 58, 0.6));
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
-        .demonic-eye-svg:hover {
+        .effect-svg:hover {
             filter: drop-shadow(0 0 20px rgba(255, 80, 40, 0.8));
             transform: scale(1.02);
         }
 
-        @keyframes eyePulse {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(170, 90, 58, 0.6)); }
-            50% { filter: drop-shadow(0 0 20px rgba(255, 80, 40, 0.9)); }
+        .rotating {
+            animation: rotatePentagram 20s linear infinite;
         }
 
-        .demonic-eye-svg {
-            animation: eyePulse 2s ease-in-out infinite;
+        @keyframes rotatePentagram {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .moon-wave {
+            animation: moonFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .wave-line {
+            animation: waveMove 3s ease-in-out infinite;
+        }
+
+        @keyframes waveMove {
+            0%, 100% { d: path("M 10 80 L 30 78 L 50 82 L 70 80 L 90 78 L 110 82"); }
+            50% { d: path("M 10 82 L 30 80 L 50 84 L 70 82 L 90 80 L 110 84"); }
         }
 
         .about {
@@ -443,30 +488,6 @@
             font-size: 0.8rem;
             margin-bottom: 0;
             text-align: center;
-        }
-
-        .about-image {
-            text-align: center;
-            background: rgba(10, 10, 20, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            padding: 40px;
-            border: 1px solid rgba(170, 90, 58, 0.3);
-            max-width: 350px;
-            margin: 0 auto;
-            transition: all 0.3s;
-        }
-
-        .about-image i {
-            font-size: 70px;
-            color: #aa5a3a;
-            transition: all 0.3s;
-        }
-
-        .about-image:hover {
-            border-color: #aa5a3a;
-            box-shadow: 0 0 35px rgba(170, 90, 58, 0.3);
-            transform: scale(1.02);
         }
 
         .terms {
@@ -965,6 +986,450 @@
             margin: 20px auto;
         }
 
+        /* Стили для блока Бес-гид и история */
+        .imp-story {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(10, 5, 15, 0.9), rgba(3, 3, 10, 0.95));
+            border-top: 1px solid rgba(170, 90, 58, 0.3);
+            border-bottom: 1px solid rgba(170, 90, 58, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .imp-story::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(170, 90, 58, 0.03) 0px, rgba(170, 90, 58, 0.03) 2px, transparent 2px, transparent 20px);
+            pointer-events: none;
+        }
+        
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        @media (min-width: 900px) {
+            .story-grid {
+                grid-template-columns: 0.8fr 1.2fr;
+                gap: 60px;
+            }
+        }
+        
+        .story-avatar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+        
+        .story-imp-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(170, 90, 58, 0.6));
+            animation: impFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .story-imp-svg:hover {
+            filter: drop-shadow(0 0 35px rgba(255, 80, 40, 0.9));
+            transform: scale(1.02);
+        }
+        
+        @keyframes impFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .avatar-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(170, 90, 58, 0.3), transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .story-content {
+            text-align: center;
+        }
+        
+        @media (min-width: 900px) {
+            .story-content {
+                text-align: left;
+            }
+        }
+        
+        .story-badge {
+            display: inline-block;
+            background: rgba(170, 90, 58, 0.2);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #ff8866;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(170, 90, 58, 0.4);
+        }
+        
+        .story-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 20px 0 16px;
+            background: linear-gradient(135deg, #e0cfb0, #bc6f4a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .story-content p {
+            color: #b8aa9a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+        
+        .story-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #aa5a3a, transparent);
+            margin: 25px 0;
+        }
+        
+        @media (min-width: 900px) {
+            .story-divider {
+                margin: 25px 0;
+            }
+        }
+        
+        .story-fact {
+            background: rgba(170, 90, 58, 0.1);
+            border-left: 3px solid #aa5a3a;
+            padding: 18px 22px;
+            border-radius: 16px;
+            margin: 25px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+        
+        .story-fact:hover {
+            background: rgba(170, 90, 58, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .story-fact i {
+            font-size: 24px;
+            color: #aa5a3a;
+            margin-top: 2px;
+        }
+        
+        .story-fact span {
+            color: #d0c0aa;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .story-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        @media (min-width: 900px) {
+            .story-stats {
+                justify-content: flex-start;
+            }
+        }
+        
+        .story-stat {
+            text-align: center;
+            background: rgba(10, 10, 20, 0.5);
+            padding: 15px 20px;
+            border-radius: 20px;
+            min-width: 100px;
+            border: 1px solid rgba(170, 90, 58, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .story-stat:hover {
+            transform: translateY(-5px);
+            border-color: #aa5a3a;
+            background: rgba(170, 90, 58, 0.1);
+        }
+        
+        .story-stat i {
+            font-size: 28px;
+            color: #aa5a3a;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .story-stat span {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #bc6f4a;
+            display: block;
+        }
+        
+        .story-stat p {
+            font-size: 0.7rem;
+            margin: 5px 0 0;
+            color: #9a8a76;
+        }
+
+        /* Стили для беса-гида */
+        .imp-guide {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(170, 90, 58, 0.5));
+            animation: bounceGuide 2s ease-in-out infinite;
+            display: none;
+        }
+        
+        .imp-guide:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(255, 80, 40, 0.8));
+        }
+        
+        @keyframes bounceGuide {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .imp-tooltip {
+            position: absolute;
+            bottom: 130px;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #ff8866;
+            white-space: nowrap;
+            border: 1px solid #aa5a3a;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(170, 90, 58, 0.3);
+            font-family: monospace;
+            z-index: 1001;
+        }
+        
+        .imp-guide:hover .imp-tooltip {
+            opacity: 1;
+        }
+        
+        /* Стили для игрового модального окна */
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-container {
+            background: #0a0a18;
+            border: 2px solid #aa5a3a;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 900px;
+            height: 80%;
+            max-height: 600px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(170, 90, 58, 0.5);
+        }
+        
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 20, 0.95);
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        
+        .game-imp {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.05s linear;
+            filter: drop-shadow(0 0 8px #aa5a3a);
+            z-index: 10;
+        }
+        
+        .game-imp.real {
+            filter: drop-shadow(0 0 15px #ff5533);
+        }
+        
+        .game-message {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ff8866;
+            padding: 12px;
+            font-size: 0.9rem;
+            z-index: 20;
+            font-weight: 500;
+        }
+        
+        .game-stats {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: #ffaa77;
+            z-index: 20;
+            font-weight: bold;
+        }
+        
+        .close-game {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            background: #aa5a3a;
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 20;
+            transition: all 0.3s;
+        }
+        
+        .close-game:hover {
+            transform: scale(1.1);
+            background: #ff5533;
+        }
+        
+        .quiz-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a18;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            z-index: 30;
+        }
+        
+        .quiz-question {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #e0cfb0;
+            font-weight: 600;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .quiz-option {
+            background: rgba(170, 90, 58, 0.2);
+            border: 1px solid #aa5a3a;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #e0cfb0;
+            font-size: 1rem;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(170, 90, 58, 0.5);
+            transform: scale(1.02);
+        }
+        
+        .quiz-feedback {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #ff8866;
+            text-align: center;
+        }
+        
+        .discount-badge {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #aa5a3a, #ff3300);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            z-index: 2000;
+            animation: discountPulse 0.5s ease-out;
+            box-shadow: 0 0 50px rgba(255, 51, 0, 0.8);
+            text-align: center;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+        
+        @keyframes discountPulse {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
         @media (min-width: 768px) {
             .hero-grid {
                 flex-direction: row;
@@ -1011,7 +1476,69 @@
     </style>
 </head>
 <body>
+    <div class="smoke-container" id="smokeContainer"></div>
     <div class="particles" id="particles"></div>
+
+    <!-- Бес-гид -->
+    <div class="imp-guide" id="impGuide">
+        <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+            <defs>
+                <radialGradient id="impBodyDark" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#5a2a2a"/>
+                    <stop offset="100%" stop-color="#2a0a0a"/>
+                </radialGradient>
+                <radialGradient id="impFace" cx="40%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#3a1a1a"/>
+                    <stop offset="100%" stop-color="#1a0505"/>
+                </radialGradient>
+                <linearGradient id="hornGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#aa5a3a"/>
+                    <stop offset="100%" stop-color="#6a2a1a"/>
+                </linearGradient>
+            </defs>
+            
+            <ellipse cx="50" cy="85" rx="35" ry="12" fill="rgba(0,0,0,0.5)" opacity="0.5"/>
+            
+            <path d="M 35 55 L 35 75 Q 35 82 42 83 L 58 83 Q 65 82 65 75 L 65 55 Q 65 48 58 48 L 42 48 Q 35 48 35 55 Z" 
+                  fill="url(#impBodyDark)" stroke="#aa5a3a" stroke-width="1.5"/>
+            
+            <path d="M 45 58 L 50 62 L 55 58" stroke="#ff6644" stroke-width="2" fill="none" opacity="0.7"/>
+            
+            <circle cx="50" cy="32" r="22" fill="url(#impFace)" stroke="#aa5a3a" stroke-width="2"/>
+            
+            <path d="M 35 25 L 42 28 M 65 25 L 58 28" stroke="#ff8866" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M 33 27 L 40 30 M 67 27 L 60 30" stroke="#aa5a3a" stroke-width="2" stroke-linecap="round" fill="none"/>
+            
+            <path d="M 32 18 L 22 5 L 32 14" fill="url(#hornGradient)" stroke="#cc6633" stroke-width="1.5"/>
+            <path d="M 68 18 L 78 5 L 68 14" fill="url(#hornGradient)" stroke="#cc6633" stroke-width="1.5"/>
+            <path d="M 28 15 L 24 8" stroke="#ffaa77" stroke-width="1" fill="none"/>
+            <path d="M 72 15 L 76 8" stroke="#ffaa77" stroke-width="1" fill="none"/>
+            
+            <circle cx="38" cy="31" r="5" fill="#ff3300" opacity="0.9">
+                <animate attributeName="r" values="5;5.5;5" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="62" cy="31" r="5" fill="#ff3300" opacity="0.9">
+                <animate attributeName="r" values="5;5.5;5" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <ellipse cx="38" cy="31" rx="2.2" ry="3.5" fill="black"/>
+            <ellipse cx="62" cy="31" rx="2.2" ry="3.5" fill="black"/>
+            
+            <path d="M 42 42 Q 50 48 58 42" stroke="#ff8866" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 44 41 L 42 45 L 46 43" fill="#ccaa88" stroke="#aa5a3a" stroke-width="1"/>
+            <path d="M 56 41 L 58 45 L 54 43" fill="#ccaa88" stroke="#aa5a3a" stroke-width="1"/>
+            
+            <circle cx="44" cy="38" r="2" fill="rgba(170,90,58,0.4)">
+                <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="56" cy="38" r="2" fill="rgba(170,90,58,0.4)">
+                <animate attributeName="r" values="2;3;2" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+            
+            <path d="M 28 28 L 20 35 L 26 32" fill="#3a1a1a" stroke="#aa5a3a" stroke-width="1"/>
+            <path d="M 72 28 L 80 35 L 74 32" fill="#3a1a1a" stroke="#aa5a3a" stroke-width="1"/>
+        </svg>
+        <div class="imp-tooltip" id="impTooltip">😈 ХОЧЕШЬ СКИДКУ? ЖМИ! 😈</div>
+    </div>
 
     <div class="navbar">
         <div class="container nav-flex">
@@ -1051,8 +1578,36 @@
                     </div>
                 </div>
                 <div class="hero-image animate-on-scroll">
-                    <div class="demonic-eye-container">
-                        <svg class="demonic-eye-svg" viewBox="0 0 100 100">
+                    <div class="svg-container">
+                        <svg class="effect-svg rotating" width="120" height="120" viewBox="0 0 100 100">
+                            <defs>
+                                <radialGradient id="pentagramGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#ff5533" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#aa3300" stop-opacity="0.3"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#aa5a3a" stroke-width="1.5" stroke-dasharray="5 5"/>
+                            <polygon points="50,15 65,40 85,45 70,65 75,90 50,78 25,90 30,65 15,45 35,40 50,15" 
+                                     fill="url(#pentagramGlow)" stroke="#aa5a3a" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="8" fill="#ff4422">
+                                <animate attributeName="r" values="8;10;8" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+
+                        <svg class="effect-svg moon-wave" width="120" height="120" viewBox="0 0 100 100">
+                            <defs>
+                                <radialGradient id="moonGradient" cx="30%" cy="30%" r="60%">
+                                    <stop offset="0%" stop-color="#ffdd99"/>
+                                    <stop offset="100%" stop-color="#aa8866"/>
+                                </radialGradient>
+                            </defs>
+                            <path d="M 70 20 Q 85 30 75 45 Q 90 55 70 65 Q 80 75 65 80 Q 70 90 55 85 Q 40 95 35 80 Q 20 85 25 70 Q 10 55 25 45 Q 15 30 30 35 Q 35 20 50 25 Q 60 10 70 20" 
+                                  fill="url(#moonGradient)" stroke="#aa5a3a" stroke-width="1.5"/>
+                            <path class="wave-line" d="M 10 80 L 30 78 L 50 82 L 70 80 L 90 78 L 110 82" stroke="#aa5a3a" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+                            <path class="wave-line" d="M 10 88 L 30 86 L 50 90 L 70 88 L 90 86 L 110 90" stroke="#cc8866" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                        </svg>
+
+                        <svg class="effect-svg" width="100" height="100" viewBox="0 0 100 100">
                             <defs>
                                 <radialGradient id="eyeGradient" cx="35%" cy="40%" r="50%">
                                     <stop offset="0%" stop-color="#2a0a0a"/>
@@ -1063,24 +1618,17 @@
                                     <stop offset="100%" stop-color="#aa3300"/>
                                 </radialGradient>
                             </defs>
-                            <!-- Склера -->
                             <ellipse cx="50" cy="50" rx="45" ry="48" fill="url(#eyeGradient)" stroke="#aa5a3a" stroke-width="2"/>
-                            <!-- Белок -->
                             <ellipse cx="50" cy="50" rx="35" ry="38" fill="#3a0f0f" stroke="#aa5a3a" stroke-width="1"/>
-                            <!-- Радужка (статичная, но с градиентом) -->
                             <circle cx="50" cy="52" r="22" fill="url(#irisGradient)"/>
-                            <!-- Зрачок (с анимацией размера) -->
                             <circle id="pupilAnim" cx="47" cy="50" r="12" fill="#000000">
                                 <animate attributeName="r" values="12;13;11;12" dur="3s" repeatCount="indefinite" />
                                 <animate attributeName="cx" values="47;48;46;47" dur="4s" repeatCount="indefinite" />
                                 <animate attributeName="cy" values="50;51;49;50" dur="3.5s" repeatCount="indefinite" />
                             </circle>
-                            <!-- Блик -->
                             <circle cx="38" cy="42" r="4" fill="white" opacity="0.9"/>
                             <circle cx="42" cy="44" r="1.5" fill="white" opacity="0.7"/>
-                            <!-- Демонические вены -->
                             <path d="M 70 35 L 85 28 M 68 45 L 82 42 M 30 35 L 15 28 M 32 45 L 18 42 M 50 70 L 50 88 M 50 30 L 50 12" stroke="#aa3a2a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-                            <path d="M 58 38 L 66 34 M 42 38 L 34 34" stroke="#cc5533" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
                         </svg>
                     </div>
                     <div class="divider"></div>
@@ -1109,11 +1657,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="about-image animate-on-scroll">
-                    <i class="fas fa-crown"></i>
-                    <i class="fas fa-fire" style="margin-left: 15px;"></i>
-                    <div class="divider"></div>
-                </div>
             </div>
         </div>
 
@@ -1141,6 +1684,102 @@
                         <h4>Цены на ритуалы</h4>
                         <p>Все ритуалы проводятся только после бесплатной диагностики. Цены индивидуальны и зависят от сложности задачи.</p>
                         <div class="price-highlight">индивидуально</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок: Бес-гид и история (ИСПРАВЛЕНО: "тому" вместо "той") -->
+        <div class="imp-story" id="impStory">
+            <div class="container">
+                <div class="story-grid">
+                    <div class="story-avatar animate-on-scroll">
+                        <div class="avatar-container">
+                            <svg viewBox="0 0 200 200" class="story-imp-svg">
+                                <defs>
+                                    <radialGradient id="storyImpBody" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#6a2a2a"/>
+                                        <stop offset="100%" stop-color="#2a0a0a"/>
+                                    </radialGradient>
+                                    <radialGradient id="storyImpFace" cx="40%" cy="40%" r="60%">
+                                        <stop offset="0%" stop-color="#4a2a2a"/>
+                                        <stop offset="100%" stop-color="#1a0505"/>
+                                    </radialGradient>
+                                </defs>
+                                
+                                <circle cx="100" cy="100" r="95" fill="none" stroke="#aa5a3a" stroke-width="1" stroke-dasharray="5 5" opacity="0.5">
+                                    <animate attributeName="r" values="95;98;95" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <path d="M 70 110 L 70 150 Q 70 165 85 166 L 115 166 Q 130 165 130 150 L 130 110 Q 130 95 115 95 L 85 95 Q 70 95 70 110 Z" 
+                                      fill="url(#storyImpBody)" stroke="#aa5a3a" stroke-width="2"/>
+                                
+                                <circle cx="100" cy="65" r="35" fill="url(#storyImpFace)" stroke="#aa5a3a" stroke-width="2.5"/>
+                                
+                                <path d="M 65 40 L 45 10 L 65 30" fill="#aa5a3a" stroke="#cc6633" stroke-width="2"/>
+                                <path d="M 135 40 L 155 10 L 135 30" fill="#aa5a3a" stroke="#cc6633" stroke-width="2"/>
+                                
+                                <circle cx="75" cy="60" r="8" fill="#ff4422">
+                                    <animate attributeName="r" values="8;9;8" dur="1s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="125" cy="60" r="8" fill="#ff4422">
+                                    <animate attributeName="r" values="8;9;8" dur="1s" repeatCount="indefinite"/>
+                                </circle>
+                                <ellipse cx="75" cy="60" rx="3" ry="5" fill="black"/>
+                                <ellipse cx="125" cy="60" rx="3" ry="5" fill="black"/>
+                                
+                                <path d="M 85 85 Q 100 95 115 85" stroke="#ff8866" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                <path d="M 88 82 L 85 88 L 92 84" fill="#ccaa88" stroke="#aa5a3a"/>
+                                <path d="M 112 82 L 115 88 L 108 84" fill="#ccaa88" stroke="#aa5a3a"/>
+                                
+                                <path d="M 60 45 L 72 52 M 140 45 L 128 52" stroke="#ff8866" stroke-width="4" stroke-linecap="round"/>
+                                
+                                <path d="M 55 55 L 68 60 L 62 70" stroke="#aa5a3a" stroke-width="2.5" fill="none"/>
+                                
+                                <circle cx="100" cy="92" r="6" fill="rgba(170,90,58,0.5)">
+                                    <animate attributeName="r" values="6;10;6" dur="1.5s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="1.5s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                            <div class="avatar-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-content animate-on-scroll">
+                        <div class="story-badge">🔥 БЕС-ГИД 🔥</div>
+                        <h3>Кто такой этот бесёнок?</h3>
+                        <p>— А вот и я, собственной персоной! <strong>Маленький, злой, но справедливый бес-гид</strong>. Меня приставили к этому сайту, чтобы всякие сомневающиеся не убегали, а сразу задавали вопросы.</p>
+                        <p>Я тут главный по <strong>навигации, подсказкам и скидкам</strong>. Если хочешь получить скидку на расклад Таро — жми на меня и проходи испытание!</p>
+                        
+                        <div class="story-divider"></div>
+                        
+                        <h3>📜 История «Окоянного дитя»</h3>
+                        <p>Началось всё <strong>пять лет назад</strong> в глухой деревне, где старуха-знахарка передала свои знания <strong>тому</strong>, кто оказался способен видеть <strong>мир мёртвых и бесов</strong>. Со временем практика выросла в мощный канал работы с <strong>семиотрядными бесами, бесовыми князьями и духами умерших</strong>.</p>
+                        <p>Сегодня «Окоянное дитя» — это <strong>более 1000 успешных ритуалов</strong>, полная анонимность и никаких откатов. Каждый обряд проходит диагностику, чтобы удар был точным, а результат — быстрым.</p>
+                        <p>— А я, бес-гид, тут для того, чтобы <strong>клиент не заблудился</strong> и вовремя получил своё. Жми на меня, если хочешь получить скидку — я хоть и вредный, но помогу тем, кто пройдёт испытание!</p>
+                        
+                        <div class="story-fact">
+                            <i class="fas fa-fire"></i>
+                            <span><strong>Забавный факт:</strong> Самый нетерпеливый клиент пытался поймать меня 47 раз. На 48-й я сдался и дал ему шанс на скидку. Так что настойчивость вознаграждается!</span>
+                        </div>
+                        
+                        <div class="story-stats">
+                            <div class="story-stat">
+                                <i class="fas fa-skull"></i>
+                                <span>1000+</span>
+                                <p>ритуалов</p>
+                            </div>
+                            <div class="story-stat">
+                                <i class="fas fa-cat"></i>
+                                <span>5 лет</span>
+                                <p>с бесами</p>
+                            </div>
+                            <div class="story-stat">
+                                <i class="fas fa-mask"></i>
+                                <span>анонимно</span>
+                                <p>100%</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1354,7 +1993,25 @@
             }
         }
         
+        function createSmoke() {
+            const smokeContainer = document.getElementById('smokeContainer');
+            
+            setInterval(() => {
+                const smoke = document.createElement('div');
+                smoke.classList.add('smoke');
+                smoke.style.left = Math.random() * 100 + '%';
+                smoke.style.animationDuration = Math.random() * 8 + 6 + 's';
+                smoke.style.animationDelay = '0s';
+                smokeContainer.appendChild(smoke);
+                
+                setTimeout(() => {
+                    smoke.remove();
+                }, 12000);
+            }, 3000);
+        }
+        
         createParticles();
+        createSmoke();
         
         const animateElements = document.querySelectorAll('.animate-on-scroll');
         
@@ -1371,12 +2028,248 @@
         window.addEventListener('scroll', checkVisibility);
         window.addEventListener('load', checkVisibility);
         
-        window.addEventListener('scroll', () => {
-            const heroImage = document.querySelector('.hero-image');
-            if (heroImage) {
-                const scrolled = window.pageYOffset;
-                heroImage.style.transform = `translateY(${scrolled * 0.1}px)`;
+        // МИНИ-ИГРА ДЛЯ ПОЛУЧЕНИЯ СКИДКИ
+        document.addEventListener('DOMContentLoaded', function() {
+            const imp = document.getElementById('impGuide');
+            const tooltip = document.getElementById('impTooltip');
+            let gameActive = false;
+            let discountGiven = localStorage.getItem('tarotDiscountApplied') === 'true';
+            
+            if (!imp) return;
+            
+            // Бес появляется через 2 секунды
+            setTimeout(() => {
+                imp.style.display = 'block';
+                imp.style.opacity = '0';
+                imp.style.transform = 'scale(0) rotate(180deg)';
+                imp.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                setTimeout(() => {
+                    imp.style.opacity = '1';
+                    imp.style.transform = 'scale(1) rotate(0deg)';
+                }, 50);
+            }, 2000);
+            
+            function showDiscount() {
+                if (discountGiven) return;
+                discountGiven = true;
+                localStorage.setItem('tarotDiscountApplied', 'true');
+                
+                const discountDiv = document.createElement('div');
+                discountDiv.className = 'discount-badge';
+                discountDiv.innerHTML = '🎉 СКИДКА 25% НА РАСКЛАД ТАРО! 🎉<br><span style="font-size: 1rem;">Пиши @Zara_zzaww с кодом BES25</span>';
+                document.body.appendChild(discountDiv);
+                
+                setTimeout(() => {
+                    discountDiv.style.transition = 'all 0.5s';
+                    discountDiv.style.opacity = '0';
+                    discountDiv.style.transform = 'translate(-50%, -50%) scale(0)';
+                    setTimeout(() => discountDiv.remove(), 500);
+                }, 4000);
+                
+                tooltip.textContent = '🎁 СКИДКА АКТИВИРОВАНА! ПИШИ! 🎁';
+                tooltip.style.opacity = '1';
+                setTimeout(() => {
+                    if (!imp.matches(':hover')) tooltip.style.opacity = '0';
+                }, 3000);
             }
+            
+            function startGame() {
+                if (gameActive) return;
+                if (discountGiven) {
+                    tooltip.textContent = "😈 Скидка уже твоя! Пиши @Zara_zzaww с кодом BES25 😈";
+                    tooltip.style.opacity = '1';
+                    setTimeout(() => tooltip.style.opacity = '0', 2000);
+                    return;
+                }
+                
+                gameActive = true;
+                
+                const modal = document.createElement('div');
+                modal.className = 'game-modal';
+                modal.innerHTML = `
+                    <div class="game-container">
+                        <button class="close-game">✕</button>
+                        <div class="game-area" id="gameArea">
+                            <div class="game-stats">Ошибки: <span id="errorCount">0</span>/3</div>
+                            <div class="game-message" id="gameMessage">Поймай НАСТОЯЩЕГО беса! У него красные глаза и золотой огонёк!</div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                const gameArea = document.getElementById('gameArea');
+                const errorSpan = document.getElementById('errorCount');
+                const messageDiv = document.getElementById('gameMessage');
+                let errors = 0;
+                let moveIntervals = [];
+                let realImp = null;
+                
+                function createImpElement(isReal, left, top) {
+                    const div = document.createElement('div');
+                    div.className = 'game-imp';
+                    if (isReal) div.classList.add('real');
+                    div.style.left = left + 'px';
+                    div.style.top = top + 'px';
+                    div.style.position = 'absolute';
+                    div.innerHTML = `
+                        <svg viewBox="0 0 80 80" width="80" height="80">
+                            <circle cx="40" cy="45" r="28" fill="#3a1a1a" stroke="#aa5a3a" stroke-width="1.5"/>
+                            <circle cx="28" cy="38" r="6" fill="${isReal ? '#ff3300' : '#aa5a3a'}"/>
+                            <circle cx="52" cy="38" r="6" fill="${isReal ? '#ff3300' : '#aa5a3a'}"/>
+                            <ellipse cx="28" cy="38" rx="2.5" ry="4" fill="black"/>
+                            <ellipse cx="52" cy="38" rx="2.5" ry="4" fill="black"/>
+                            <path d="M 30 55 L 40 62 L 50 55" stroke="#ff8866" stroke-width="2" fill="none"/>
+                            ${isReal ? '<circle cx="40" cy="28" r="4" fill="gold"><animate attributeName="r" values="4;6;4" dur="0.8s" repeatCount="indefinite"/></circle>' : ''}
+                        </svg>
+                    `;
+                    div.dataset.real = isReal ? 'true' : 'false';
+                    return div;
+                }
+                
+                function startMoving(imp) {
+                    let dx = (Math.random() - 0.5) * 3;
+                    let dy = (Math.random() - 0.5) * 3;
+                    const interval = setInterval(() => {
+                        if (!gameArea.contains(imp)) {
+                            clearInterval(interval);
+                            return;
+                        }
+                        let left = parseFloat(imp.style.left);
+                        let top = parseFloat(imp.style.top);
+                        left += dx;
+                        top += dy;
+                        const maxX = gameArea.clientWidth - 80;
+                        const maxY = gameArea.clientHeight - 80;
+                        if (left <= 0) { left = 0; dx = -dx; }
+                        if (left >= maxX) { left = maxX; dx = -dx; }
+                        if (top <= 0) { top = 0; dy = -dy; }
+                        if (top >= maxY) { top = maxY; dy = -dy; }
+                        imp.style.left = left + 'px';
+                        imp.style.top = top + 'px';
+                    }, 50);
+                    moveIntervals.push(interval);
+                    imp.moveInterval = interval;
+                }
+                
+                function stopAllMoving() {
+                    moveIntervals.forEach(interval => clearInterval(interval));
+                    moveIntervals = [];
+                }
+                
+                function startQuiz() {
+                    stopAllMoving();
+                    gameArea.innerHTML = '';
+                    const quizDiv = document.createElement('div');
+                    quizDiv.className = 'quiz-area';
+                    const questions = [
+                        { text: "Сколько лет практике «Окоянное дитя»?", options: ["3 года", "5 лет", "7 лет"], correct: 1 },
+                        { text: "С какими сущностями работает практика?", options: ["Ангелы", "Семиотрядные бесы", "Домовые"], correct: 1 },
+                        { text: "Что нужно сделать перед любым ритуалом?", options: ["Купить свечи", "Бесплатную диагностику", "Поститься"], correct: 1 }
+                    ];
+                    let currentQ = 0;
+                    let quizErrors = 0;
+                    
+                    function showQuestion() {
+                        quizDiv.innerHTML = `
+                            <div style="text-align:center; width:100%;">
+                                <div class="quiz-question">${questions[currentQ].text}</div>
+                                <div class="quiz-options">
+                                    ${questions[currentQ].options.map((opt, idx) => `<div class="quiz-option" data-opt="${idx}">${opt}</div>`).join('')}
+                                </div>
+                                <div class="quiz-feedback" id="quizFeedback"></div>
+                            </div>
+                        `;
+                        quizDiv.querySelectorAll('.quiz-option').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const selected = parseInt(btn.dataset.opt);
+                                const feedback = quizDiv.querySelector('#quizFeedback');
+                                if (selected === questions[currentQ].correct) {
+                                    feedback.innerHTML = '✅ Верно!';
+                                    currentQ++;
+                                    if (currentQ < questions.length) {
+                                        setTimeout(showQuestion, 800);
+                                    } else {
+                                        feedback.innerHTML = '🎉 Ты прошёл испытание! Скидка активирована! 🎉';
+                                        setTimeout(() => {
+                                            showDiscount();
+                                            modal.remove();
+                                            gameActive = false;
+                                        }, 1500);
+                                    }
+                                } else {
+                                    quizErrors++;
+                                    feedback.innerHTML = `❌ Неправильно. Ошибок: ${quizErrors}/2`;
+                                    if (quizErrors >= 2) {
+                                        feedback.innerHTML = '💀 Слишком много ошибок. Игра проиграна! Начни заново...';
+                                        setTimeout(() => {
+                                            modal.remove();
+                                            gameActive = false;
+                                        }, 1500);
+                                    }
+                                }
+                            });
+                        });
+                        gameArea.appendChild(quizDiv);
+                    }
+                    showQuestion();
+                }
+                
+                // Создаём 6-8 бесов, один реальный
+                const total = 6 + Math.floor(Math.random() * 3);
+                const realIndex = Math.floor(Math.random() * total);
+                
+                for (let i = 0; i < total; i++) {
+                    const isReal = (i === realIndex);
+                    const left = 20 + Math.random() * (gameArea.clientWidth - 100);
+                    const top = 20 + Math.random() * (gameArea.clientHeight - 100);
+                    const impEl = createImpElement(isReal, left, top);
+                    
+                    impEl.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (impEl.dataset.real === 'true') {
+                            stopAllMoving();
+                            messageDiv.textContent = '✔️ Ты поймал настоящего беса! Теперь ответь на вопросы...';
+                            document.querySelectorAll('.game-imp').forEach(el => el.remove());
+                            startQuiz();
+                        } else {
+                            errors++;
+                            errorSpan.textContent = errors;
+                            messageDiv.textContent = `❌ Ложный бес! Штраф: ${errors}/3`;
+                            if (errors >= 3) {
+                                messageDiv.textContent = '💀 Слишком много ошибок! Игра проиграна. Начни заново...';
+                                stopAllMoving();
+                                setTimeout(() => {
+                                    modal.remove();
+                                    gameActive = false;
+                                }, 1500);
+                            } else {
+                                impEl.remove();
+                                const newLeft = 20 + Math.random() * (gameArea.clientWidth - 100);
+                                const newTop = 20 + Math.random() * (gameArea.clientHeight - 100);
+                                const newFake = createImpElement(false, newLeft, newTop);
+                                newFake.addEventListener('click', arguments.callee);
+                                gameArea.appendChild(newFake);
+                                startMoving(newFake);
+                            }
+                        }
+                    });
+                    
+                    gameArea.appendChild(impEl);
+                    startMoving(impEl);
+                    if (isReal) realImp = impEl;
+                }
+                
+                modal.querySelector('.close-game').addEventListener('click', () => {
+                    stopAllMoving();
+                    modal.remove();
+                    gameActive = false;
+                });
+            }
+            
+            imp.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startGame();
+            });
         });
     </script>
 </body>
